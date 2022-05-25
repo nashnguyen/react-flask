@@ -1,4 +1,4 @@
 from .base import db
-from .data_model import DataModel
+from .salaries import Salary
 
-__all__ = ['db', 'DataModel']
+__all__ = ['db', 'Salary']

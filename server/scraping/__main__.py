@@ -1,6 +1,10 @@
+import os
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 html = requests.get('https://hoopshype.com/salaries/players/')
 soup = BeautifulSoup(html.text, 'html.parser')
@@ -31,5 +35,11 @@ for url_item in url_list_item:
         temp_df = temp_df.melt(id_vars='player', var_name='season', value_name='salary')
 
     final_df = pd.concat([final_df, temp_df])
+    final_df = final_df.replace({'salary': {'\$': '', ',': ''}}, regex=True).astype(
+        {'player': 'string', 'season': 'string', 'salary': 'int32'}
+    )
 
-final_df.to_csv('data.csv', index=False)
+load_dotenv('.env')
+engine = create_engine(os.environ.get('DATABASE_URL'))
+
+final_df.to_sql('salary', con=engine, if_exists='replace', method='multi')
