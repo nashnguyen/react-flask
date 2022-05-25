@@ -1,0 +1,7 @@
+# dependencies
+/migrations
+/venv
+
+# local env files
+.env*.local
+/.env
