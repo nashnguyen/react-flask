@@ -1,3 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
+from .base import db
+from .data_model import DataModel
 
-db = SQLAlchemy()
+__all__ = ['db', 'DataModel']
