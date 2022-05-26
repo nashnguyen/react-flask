@@ -1,17 +1,14 @@
-from flask_migrate import Migrate
-
 from api import create_app
-from models import db
+from models import engine, Base, Salary
 
 app = create_app()
-migrate = Migrate(app, db)
 
 
-@app.cli.command("recreate_db")
-def recreate_db():
-    # Recreates a database when there's a new database instance
-    db.drop_all()
-    db.create_all()
+@app.cli.command("create_db")
+def create_db():
+    # Creates a database when there's a new database instance
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
 
 
 if __name__ == "__main__":

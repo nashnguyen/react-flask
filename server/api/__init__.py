@@ -1,26 +1,33 @@
+import os
+
 from flask import Flask
 from flask_cors import CORS
-from flask_migrate import Migrate
-from models import db
+from flask_graphql import GraphQLView
 from sqlalchemy_utils import create_database, database_exists
 
-from api.config import Config
-
-app = Flask(__name__)
-CORS(app)
+from models import db_session
+from schema import schema
 
 
 def create_app():
-    # load config
-    app.config.from_object(Config)
+    app = Flask(__name__)
+
+    # add CORS
+    CORS(app)
 
     # create databases if not exists
-    db_url = app.config["SQLALCHEMY_DATABASE_URI"]
-    if not database_exists(db_url):
-        create_database(db_url)
+    if not database_exists(os.environ.get('DATABASE_URL')):
+        create_database(os.environ.get('DATABASE_URL'))
 
-    # initialize Flask SQLALchemy with this flask app
-    db.init_app(app)
-    Migrate(app, db)
+    app.add_url_rule(
+        '/graphql',
+        view_func=GraphQLView.as_view(
+            'graphql', schema=schema, graphiql=True  # for having the GraphiQL interface
+        ),
+    )
+
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db_session.remove()
 
     return app
