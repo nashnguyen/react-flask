@@ -42,4 +42,11 @@ for url_item in url_list_item:
         {'player': 'string', 'season': 'string', 'salary': 'int32'}
     )
 
-final_df.to_sql('salary', con=engine, if_exists='replace', method='multi')
+final_df.to_sql(
+    'salary',
+    con=engine,
+    if_exists='replace',
+    index=True,
+    index_label="id",
+    method='multi',
+)

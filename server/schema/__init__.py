@@ -1,17 +1,19 @@
-from graphene import ObjectType, Schema, relay
-from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
+from graphene import List, ObjectType, Schema
+from graphene_sqlalchemy import SQLAlchemyObjectType
+
 from models import Salary as SalaryModel
 
 
 class Salary(SQLAlchemyObjectType):
     class Meta:
         model = SalaryModel
-        interfaces = (relay.Node,)
 
 
 class Query(ObjectType):
-    node = relay.Node.Field()
-    all_salaries = SQLAlchemyConnectionField(Salary.connection)
+    salaries = List(Salary)
+
+    def resolve_salaries(self, info):
+        return Salary.get_query(info).all()
 
 
 schema = Schema(query=Query)
