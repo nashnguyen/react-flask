@@ -1,0 +1,8 @@
+query salaries {
+  salaries {
+    id
+    player
+    season
+    salary
+  }
+}

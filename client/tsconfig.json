@@ -16,10 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "paths": {
-    "@features/*": ["./src/features/*"],
-    "@ultis/*": ["./src/ultis/*"]
-  },
   "include": ["src"],
   "exclude": ["node_modules"]
 }

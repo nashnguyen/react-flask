@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'urql';
 
 import { Layout } from './features/shared';
+import Home from './features/home';
 import client from './ultis/urql-client';
 
 const App = () => {
@@ -10,10 +11,7 @@ const App = () => {
       <BrowserRouter>
         <Layout>
           <Routes>
-            <Route
-              path='/'
-              element={<span className='text-blue-500'>Home</span>}
-            ></Route>
+            <Route path='/' element={<Home />}></Route>
             <Route
               path='/test'
               element={<span className='text-red-500'>Test Page</span>}
